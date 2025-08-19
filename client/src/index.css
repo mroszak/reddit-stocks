@@ -1,0 +1,220 @@
+body {
+  margin: 0;
+  font-family: 'Roboto', 'Roboto Mono', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+code {
+  font-family: 'Roboto Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #404040;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555555;
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom app styles */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Trading-style number formatting */
+.positive-number {
+  color: #00e676 !important;
+}
+
+.negative-number {
+  color: #ff1744 !important;
+}
+
+.neutral-number {
+  color: #ff9800 !important;
+}
+
+/* Custom chip styles for confidence levels */
+.confidence-very-high {
+  background-color: #2e7d32 !important;
+  color: white !important;
+}
+
+.confidence-high {
+  background-color: #1976d2 !important;
+  color: white !important;
+}
+
+.confidence-medium {
+  background-color: #ed6c02 !important;
+  color: white !important;
+}
+
+.confidence-low {
+  background-color: #d32f2f !important;
+  color: white !important;
+}
+
+/* Table row hover effects */
+.MuiTableRow-root:hover {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Custom loading indicator */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+/* Responsive design helpers */
+@media (max-width: 600px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+  
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+  
+  .mobile-full-width {
+    width: 100% !important;
+  }
+}
+
+/* Animation classes */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Custom badge styles */
+.badge-oracle {
+  background: linear-gradient(45deg, #ff6b6b, #ffa500) !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+.badge-expert {
+  background: linear-gradient(45deg, #4ecdc4, #44a08d) !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+.badge-analyst {
+  background: linear-gradient(45deg, #667eea, #764ba2) !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+/* Status indicator styles */
+.status-healthy {
+  color: #4caf50 !important;
+}
+
+.status-warning {
+  color: #ff9800 !important;
+}
+
+.status-error {
+  color: #f44336 !important;
+}
+
+/* Custom chart container */
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+}
+
+.chart-container canvas {
+  border-radius: 8px;
+}
+
+/* Glassmorphism effect for cards */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+}
+
+/* Trending indicators */
+.trending-hot {
+  color: #ff5722 !important;
+  text-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+}
+
+.trending-rising {
+  color: #ff9800 !important;
+  text-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+}
+
+.trending-moderate {
+  color: #2196f3 !important;
+  text-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+}
+
+/* WebSocket connection status */
+.ws-connected {
+  color: #4caf50 !important;
+}
+
+.ws-disconnected {
+  color: #f44336 !important;
+}
+
+.ws-connecting {
+  color: #ff9800 !important;
+}
