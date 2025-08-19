@@ -1,0 +1,62 @@
+# Development files
+.env
+.env.local
+.env.development
+.env.test
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# nyc test coverage
+.nyc_output
+
+# node_modules is handled by npm install
+# but include it here for safety
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Development scripts
+kill_and_start.sh
+stop_app.sh
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Documentation (keep deployment guide)
+!RENDER_DEPLOYMENT_GUIDE.md
+README.md
+
+# Build artifacts from local development
+client/build/
+build/
+dist/

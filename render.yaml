@@ -1,0 +1,59 @@
+services:
+  # Main web service
+  - type: web
+    name: reddit-stocks-tracker
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        fromDatabase:
+          name: mongodb
+          property: connectionString
+      # Add your existing environment variables here
+      # These will need to be set in the Render dashboard
+      - key: REDDIT_CLIENT_ID
+        sync: false
+      - key: REDDIT_CLIENT_SECRET
+        sync: false
+      - key: REDDIT_USERNAME
+        sync: false
+      - key: REDDIT_PASSWORD
+        sync: false
+      - key: REDDIT_USER_AGENT
+        sync: false
+      - key: ALPHA_VANTAGE_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: FRED_API_KEY
+        sync: false
+    regions:
+      - oregon
+    
+  # MongoDB database (if using Render's managed MongoDB)
+  # Comment this out if you're using MongoDB Atlas or another external service
+  # - type: database
+  #   name: mongodb
+  #   plan: free
+  #   engine: mongodb
+  #   version: "6.0"
+  #   region: oregon
+
+# Build settings
+buildFilter:
+  paths:
+    - server.js
+    - package*.json
+    - client/**/*
+    - routes/**/*
+    - services/**/*
+    - models/**/*
+    - utils/**/*
+    - scripts/**/*
