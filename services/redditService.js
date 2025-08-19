@@ -163,17 +163,26 @@ class RedditService {
     await this.checkRateLimit();
 
     try {
-      const user = await this.client.getUser(username);
+      const user = await this.client.getUser(username).fetch();
+      
+      // Calculate account age in days
+      const accountAge = user.created_utc ? 
+        Math.floor((Date.now() - user.created_utc * 1000) / (1000 * 60 * 60 * 24)) : 0;
+      
+      // Get karma values with fallbacks
+      const totalKarma = typeof user.total_karma === 'number' ? user.total_karma : 
+                        (typeof user.link_karma === 'number' && typeof user.comment_karma === 'number' ? 
+                         user.link_karma + user.comment_karma : 0);
       
       return {
-        username: user.name,
-        account_age: Math.floor((Date.now() - user.created_utc * 1000) / (1000 * 60 * 60 * 24)),
-        karma: user.total_karma || (user.link_karma + user.comment_karma),
-        link_karma: user.link_karma,
-        comment_karma: user.comment_karma,
-        is_verified: user.verified || false,
-        is_gold: user.is_gold || false,
-        created_utc: new Date(user.created_utc * 1000)
+        username: user.name || username,
+        account_age: accountAge,
+        karma: totalKarma,
+        link_karma: typeof user.link_karma === 'number' ? user.link_karma : 0,
+        comment_karma: typeof user.comment_karma === 'number' ? user.comment_karma : 0,
+        is_verified: !!user.verified,
+        is_gold: !!user.is_gold,
+        created_utc: user.created_utc ? new Date(user.created_utc * 1000) : new Date()
       };
     } catch (error) {
       console.error(`❌ Error fetching user info for ${username}:`, error.message);

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const cron = require('node-cron');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
@@ -131,10 +132,32 @@ app.get('/api/health', async (req, res) => {
 
 // Serve static files from React app in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'client/build')));
+  const clientBuildPath = path.join(__dirname, 'client', 'build');
+  console.log('📁 Static files path:', clientBuildPath);
   
+  // Check if build directory exists
+  if (!fs.existsSync(clientBuildPath)) {
+    console.error('❌ Client build directory does not exist:', clientBuildPath);
+    console.log('📍 Current directory:', __dirname);
+    console.log('📂 Directory contents:', fs.readdirSync(__dirname));
+  } else {
+    console.log('✅ Client build directory found');
+    app.use(express.static(clientBuildPath));
+  }
+  
+  // Catch-all handler should return React app
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    const indexPath = path.join(__dirname, 'client', 'build', 'index.html');
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+    } else {
+      console.error('❌ index.html not found at:', indexPath);
+      res.status(404).json({ 
+        error: 'Client application not found',
+        message: 'The React app build files are missing. Please ensure the client app is built.',
+        lookedIn: indexPath
+      });
+    }
   });
 }
 
