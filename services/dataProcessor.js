@@ -550,6 +550,46 @@ class DataProcessor {
     }
   }
 
+  // Process an array of Reddit posts (used by monitoring service)
+  async processRedditPosts(posts, subredditName = null) {
+    if (!posts || posts.length === 0) {
+      return [];
+    }
+
+    const processedPosts = [];
+    const subredditConfig = subredditName ? 
+      await SubredditConfig.findOne({ name: subredditName }) : null;
+
+    for (const postData of posts) {
+      try {
+        // Check if post already exists
+        const existingPost = await RedditPost.findOne({ reddit_id: postData.reddit_id });
+        if (existingPost) {
+          continue; // Skip already processed posts
+        }
+
+        // Process the post
+        await this.processPost(postData, subredditConfig || {
+          name: postData.subreddit,
+          config: {
+            min_upvotes: 10,
+            min_comments: 3,
+            quality_threshold: 30,
+            exclude_flairs: []
+          }
+        });
+        
+        this.processingStats.posts_processed++;
+        processedPosts.push(postData);
+      } catch (error) {
+        console.error(`❌ Error processing post ${postData.reddit_id}:`, error.message);
+        this.processingStats.errors++;
+      }
+    }
+
+    return processedPosts;
+  }
+
   // Get aggregated stock sentiment data with cross-validation
   async getStockSentimentData(ticker, timeframe = 24, enableCrossValidation = true) {
     try {

@@ -97,7 +97,7 @@ class MonitoringService {
             }
 
             // Process the posts
-            const processed = await dataProcessor.processRedditPosts(result.posts);
+            const processed = await dataProcessor.processRedditPosts(result.posts, result.subreddit);
             totalProcessed += processed.length;
 
             processingResults.push({

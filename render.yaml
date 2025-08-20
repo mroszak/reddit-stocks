@@ -4,7 +4,7 @@ services:
     name: reddit-stocks-tracker
     env: node
     plan: free
-    buildCommand: ./scripts/render-build.sh
+    buildCommand: npm run render-postbuild
     startCommand: node server.js
     healthCheckPath: /api/health
     envVars:
