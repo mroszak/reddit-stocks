@@ -17,18 +17,18 @@ const userProfileSchema = new mongoose.Schema({
   },
   karma: {
     type: Number,
-    default: 0,
-    min: 0
+    default: 0
+    // Allow negative karma values
   },
   comment_karma: {
     type: Number,
-    default: 0,
-    min: 0
+    default: 0
+    // Allow negative karma values
   },
   link_karma: {
     type: Number,
-    default: 0,
-    min: 0
+    default: 0
+    // Allow negative karma values
   },
   
   // Posting activity
@@ -281,7 +281,7 @@ userProfileSchema.virtual('engagement_score').get(function() {
 userProfileSchema.methods.calculateQualityScore = function() {
   // Quality score algorithm from architecture document
   const accountAgeScore = Math.min(100, this.account_age / 365 * 100); // Max score at 1 year
-  const karmaScore = Math.min(100, Math.log10(this.karma + 1) * 20); // Logarithmic scaling
+  const karmaScore = Math.min(100, Math.log10(Math.max(1, this.karma + 1)) * 20); // Logarithmic scaling, handle negative karma
   const financeFreqScore = this.finance_post_frequency * 100;
   const accuracyScore = this.accuracy_score;
   
