@@ -38,7 +38,12 @@ class TickerExtractor {
       'FAR', 'END', 'EAR', 'EAT', 'DOG', 'CUT', 'CRY', 'COP', 'CAR', 'BOX', 'BIG', 'BED',
       'BAG', 'ASK', 'ARM', 'AGE', 'ADD', 'ACT', 'USD', 'CEO', 'IPO', 'SEC', 'FDA', 'ETF',
       'NYSE', 'API', 'URL', 'PDF', 'LOL', 'OMG', 'WTF', 'TBH', 'IMO', 'FOMO', 'YOLO', 'DD',
-      'TA', 'FA', 'PT', 'PT', 'EOD', 'AH', 'PM', 'AM', 'EDIT', 'TLDR', 'ELI', 'AMA'
+      'TA', 'FA', 'PT', 'PT', 'EOD', 'AH', 'PM', 'AM', 'EDIT', 'TLDR', 'ELI', 'AMA',
+      // Protocol and URL-related false positives
+      'HTTP', 'HTTPS', 'WWW', 'COM', 'NET', 'ORG', 'EDU', 'GOV', 'MIL', 'INT', 'FTP',
+      'SMTP', 'DNS', 'SSH', 'SSL', 'TLS', 'HTML', 'CSS', 'JSON', 'XML', 'RSS',
+      // Common tech/abbreviation false positives
+      'INFO', 'DATA', 'MAIN', 'FILE', 'PAGE', 'SITE', 'HOME', 'NEWS', 'BLOG', 'HELP'
     ]);
 
     // Known valid tickers (this would ideally be loaded from a comprehensive list)

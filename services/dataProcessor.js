@@ -504,6 +504,53 @@ class DataProcessor {
     };
   }
 
+  // Clean up false positive tickers from database
+  async cleanupFalsePositiveTickers() {
+    console.log('🧹 Starting cleanup of false positive tickers...');
+    
+    try {
+      const falsePositives = [
+        'HTTPS', 'HTTP', 'WWW', 'COM', 'NET', 'ORG', 'EDU', 'GOV', 'MIL', 'INT', 'FTP',
+        'SMTP', 'DNS', 'SSH', 'SSL', 'TLS', 'HTML', 'CSS', 'JSON', 'XML', 'RSS',
+        'INFO', 'DATA', 'MAIN', 'FILE', 'PAGE', 'SITE', 'HOME', 'NEWS', 'BLOG', 'HELP'
+      ];
+
+      // Remove from StockData collection
+      const stockDataResult = await StockData.deleteMany({
+        ticker: { $in: falsePositives }
+      });
+      console.log(`🗑️ Removed ${stockDataResult.deletedCount} false positive stock data entries`);
+
+      // Remove ticker references from Reddit posts
+      let postsUpdated = 0;
+      const posts = await RedditPost.find({
+        'tickers.symbol': { $in: falsePositives }
+      });
+
+      for (const post of posts) {
+        const originalTickerCount = post.tickers.length;
+        post.tickers = post.tickers.filter(ticker => !falsePositives.includes(ticker.symbol));
+        
+        if (post.tickers.length !== originalTickerCount) {
+          await post.save();
+          postsUpdated++;
+        }
+      }
+      console.log(`📝 Updated ${postsUpdated} posts to remove false positive tickers`);
+
+      return {
+        success: true,
+        stock_data_removed: stockDataResult.deletedCount,
+        posts_updated: postsUpdated,
+        false_positives_cleaned: falsePositives
+      };
+
+    } catch (error) {
+      console.error('❌ Error cleaning up false positive tickers:', error.message);
+      throw error;
+    }
+  }
+
   // Manual cleanup of old data
   async cleanupOldData(options = {}) {
     const { daysToKeep = 30, dryRun = false } = options;

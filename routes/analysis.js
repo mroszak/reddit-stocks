@@ -5,6 +5,7 @@ const newsService = require('../services/newsService');
 const fredService = require('../services/fredService');
 const userReputationService = require('../services/userReputationService');
 const confidenceService = require('../services/confidenceService');
+const dataProcessor = require('../services/dataProcessor');
 const RedditPost = require('../models/RedditPost');
 const UserProfile = require('../models/UserProfile');
 const StockData = require('../models/StockData');
@@ -781,6 +782,30 @@ router.get('/status', async (req, res) => {
       data: status
     });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// ==================== DATA CLEANUP ====================
+
+// POST /api/analysis/cleanup/false-positives - Clean up false positive tickers
+router.post('/cleanup/false-positives', async (req, res) => {
+  try {
+    console.log('🧹 Manual cleanup of false positive tickers requested');
+    const result = await dataProcessor.cleanupFalsePositiveTickers();
+    
+    res.json({
+      success: true,
+      data: result,
+      metadata: {
+        cleaned_at: new Date().toISOString()
+      }
+    });
+  } catch (error) {
+    console.error('❌ Error during false positive cleanup:', error.message);
     res.status(500).json({
       success: false,
       error: error.message
