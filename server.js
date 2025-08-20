@@ -132,33 +132,55 @@ app.get('/api/health', async (req, res) => {
 
 // Serve static files from React app in production
 if (process.env.NODE_ENV === 'production') {
-  const clientBuildPath = path.join(__dirname, 'client', 'build');
-  console.log('📁 Static files path:', clientBuildPath);
+  // Try multiple possible paths for the client build
+  const possiblePaths = [
+    path.join(__dirname, 'client', 'build'),
+    path.join(__dirname, '..', 'client', 'build'),
+    path.join(process.cwd(), 'client', 'build')
+  ];
   
-  // Check if build directory exists
-  if (!fs.existsSync(clientBuildPath)) {
-    console.error('❌ Client build directory does not exist:', clientBuildPath);
-    console.log('📍 Current directory:', __dirname);
-    console.log('📂 Directory contents:', fs.readdirSync(__dirname));
-  } else {
-    console.log('✅ Client build directory found');
-    app.use(express.static(clientBuildPath));
+  let clientBuildPath = null;
+  let indexPath = null;
+  
+  for (const testPath of possiblePaths) {
+    console.log('🔍 Testing path:', testPath);
+    if (fs.existsSync(testPath)) {
+      const testIndexPath = path.join(testPath, 'index.html');
+      if (fs.existsSync(testIndexPath)) {
+        clientBuildPath = testPath;
+        indexPath = testIndexPath;
+        console.log('✅ Found client build at:', clientBuildPath);
+        break;
+      }
+    }
   }
   
-  // Catch-all handler should return React app
-  app.get('*', (req, res) => {
-    const indexPath = path.join(__dirname, 'client', 'build', 'index.html');
-    if (fs.existsSync(indexPath)) {
+  if (clientBuildPath && indexPath) {
+    console.log('📁 Using static files path:', clientBuildPath);
+    app.use(express.static(clientBuildPath));
+    
+    // Catch-all handler should return React app
+    app.get('*', (req, res) => {
       res.sendFile(indexPath);
-    } else {
-      console.error('❌ index.html not found at:', indexPath);
+    });
+  } else {
+    console.error('❌ Client build directory not found in any of these locations:');
+    possiblePaths.forEach(p => console.error('  -', p));
+    console.log('📍 Current directory:', __dirname);
+    console.log('📍 Process working directory:', process.cwd());
+    console.log('📂 Directory contents:', fs.readdirSync(__dirname));
+    
+    // Fallback catch-all handler
+    app.get('*', (req, res) => {
       res.status(404).json({ 
         error: 'Client application not found',
         message: 'The React app build files are missing. Please ensure the client app is built.',
-        lookedIn: indexPath
+        searchedPaths: possiblePaths,
+        currentDir: __dirname,
+        workingDir: process.cwd()
       });
-    }
-  });
+    });
+  }
 }
 
 // Global error handler
