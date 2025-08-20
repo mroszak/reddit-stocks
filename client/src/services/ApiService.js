@@ -2,7 +2,17 @@ import axios from 'axios';
 
 class ApiServiceClass {
   constructor() {
-    this.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+    // Determine the base URL dynamically:
+    // 1. Respect explicit environment variable if provided
+    // 2. In browser context and not running on localhost, use the same origin as the frontend to avoid cross-origin issues
+    // 3. Fallback to localhost for local development
+    if (process.env.REACT_APP_API_URL) {
+      this.baseURL = process.env.REACT_APP_API_URL;
+    } else if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+      this.baseURL = window.location.origin;
+    } else {
+      this.baseURL = 'http://localhost:5000';
+    }
     this.api = null;
   }
 

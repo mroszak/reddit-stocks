@@ -421,7 +421,6 @@ const stockDataSchema = new mongoose.Schema({
 });
 
 // Indexes for performance
-stockDataSchema.index({ ticker: 1 });
 stockDataSchema.index({ trending_score: -1 });
 stockDataSchema.index({ 'reddit_mentions.last_24h': -1 });
 stockDataSchema.index({ is_trending: 1, momentum_score: -1 });

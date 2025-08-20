@@ -24,8 +24,11 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.NODE_ENV === 'production' 
-      ? [process.env.FRONTEND_URL || "https://reddit-stocks-tracker.onrender.com"] 
+    origin: process.env.NODE_ENV === 'production'
+      ? [
+          process.env.FRONTEND_URL || "https://reddit-stocks-tracker.onrender.com",
+          "https://reddit-stocks.onrender.com"
+        ]
       : ["http://localhost:3000"],
     methods: ["GET", "POST"]
   }

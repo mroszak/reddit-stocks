@@ -261,7 +261,6 @@ const userProfileSchema = new mongoose.Schema({
 });
 
 // Indexes for performance
-userProfileSchema.index({ username: 1 });
 userProfileSchema.index({ quality_score: -1 });
 userProfileSchema.index({ reputation_tier: 1, accuracy_score: -1 });
 userProfileSchema.index({ is_bot: 1, is_suspicious: 1 });

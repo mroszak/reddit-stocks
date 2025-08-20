@@ -20,9 +20,21 @@ class WebSocketServiceClass {
     }
 
     const protocol = (typeof window !== 'undefined' && window.location.protocol === 'https:') ? 'wss' : 'ws';
-    const defaultUrl = (typeof window !== 'undefined')
-      ? `${protocol}://${window.location.hostname}:5000`
-      : 'http://localhost:5000';
+
+    let defaultUrl;
+    if (typeof window !== 'undefined') {
+      if (window.location.hostname === 'localhost') {
+        // Local development assumes the backend runs on port 5000
+        defaultUrl = `${protocol}://localhost:5000`;
+      } else {
+        // In production, use the same host (which already includes port if any)
+        defaultUrl = `${protocol}://${window.location.host}`;
+      }
+    } else {
+      // Non-browser context (tests, server-side rendering)
+      defaultUrl = 'ws://localhost:5000';
+    }
+
     const wsUrl = process.env.REACT_APP_WS_URL || defaultUrl;
     console.log('🔌 Initializing WebSocket connection to:', wsUrl);
 

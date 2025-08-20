@@ -187,11 +187,11 @@ const subredditConfigSchema = new mongoose.Schema({
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
-  toObject: { virtuals: true }
+  toObject: { virtuals: true },
+  suppressReservedKeysWarning: true
 });
 
 // Indexes
-subredditConfigSchema.index({ name: 1 });
 subredditConfigSchema.index({ is_active: 1, last_scraped: 1 });
 subredditConfigSchema.index({ 'performance_metrics.accuracy_rate': -1 });
 
