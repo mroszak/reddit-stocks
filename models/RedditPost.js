@@ -33,6 +33,12 @@ const redditPostSchema = new mongoose.Schema({
     required: true,
     index: true
   },
+  // Reference to user profile document for population
+  author_profile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'UserProfile',
+    index: true
+  },
   author_flair: {
     type: String,
     default: ''
