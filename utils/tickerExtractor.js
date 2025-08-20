@@ -43,7 +43,11 @@ class TickerExtractor {
       'HTTP', 'HTTPS', 'WWW', 'COM', 'NET', 'ORG', 'EDU', 'GOV', 'MIL', 'INT', 'FTP',
       'SMTP', 'DNS', 'SSH', 'SSL', 'TLS', 'HTML', 'CSS', 'JSON', 'XML', 'RSS',
       // Common tech/abbreviation false positives
-      'INFO', 'DATA', 'MAIN', 'FILE', 'PAGE', 'SITE', 'HOME', 'NEWS', 'BLOG', 'HELP'
+      'INFO', 'DATA', 'MAIN', 'FILE', 'PAGE', 'SITE', 'HOME', 'NEWS', 'BLOG', 'HELP',
+      // Common English words that are often false positives
+      'TO', 'OF', 'AT', 'IS', 'ON', 'BY', 'AS', 'OR', 'IF', 'SO', 'NO', 'UP', 'MY', 'WE',
+      'BE', 'DO', 'GO', 'HE', 'IT', 'ME', 'US', 'ANY', 'BAD', 'BIG', 'EACH', 'EVERY',
+      'PRICE', 'STOCK', 'MONEY', 'CASH', 'SHARE', 'AFTER', 'BEFORE', 'ABOVE', 'BELOW'
     ]);
 
     // Known valid tickers (this would ideally be loaded from a comprehensive list)
